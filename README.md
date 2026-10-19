@@ -1,6 +1,6 @@
-#arduino-test 
+## arduino-test 
 
-checking compilers
+Checking if utilities do exist
 
 ```
 avr-gcc --version
@@ -10,33 +10,42 @@ avrdude --version
 
 For compiling then:
 ```
-avr-g++ -mmcu=atmega328p -DF_CPU=16000000UL -Os -o main.elf main.cpp
+avr-g++ -mmcu=atmega328p -DF_CPU=16000000UL -Os -o board_trans.elf board_trans.cpp
 ```
 
 Later:
 ```
-avr-objcopy -O ihex -R .eeprom main.elf main.hex
+avr-objcopy -O ihex -R .eeprom main.elf board_trans.hex
 ```
 
-The directory will have the following thre files:
+Then, the following three files will be generated:
 ```
-main.cpp
-main.elf
-main.hex
+board_trans.cpp
+board_trans.elf
+board_trans.hex
 ```
+
+The next step is uploading the hex to the board. First, check the computer detects the device
 
 ```
 avrdude -v -p atmega328p -c arduino -P COM<n> -b 115200
 ```
 
-If everthing's okey we should see something as follows:
+If everything is right, we should see the next response:
 ```
 avrdude: Device signature = 0x1e950f
 ```
 
-Upload the .hex to the board by typing the following:
+Upload the .hex to the board by typing what's next:
 ```
-avrdude -p atmega328p -c arduino -P COM<n> -b 115200 -U flash:w:main.hex:i
+avrdude -p atmega328p -c arduino -P COM<n> -b 115200 -U flash:w:board_trans.hex:i
 ```
 
-Some arduinos use 57600 instead of 115200 baudios. Check it
+Some Arduinos use 57600 instead of 115200 baud rate. Avrdude does not upload it when baud rate's is the incorrect.
+
+### code
+
+In the code are specific functions for:
+
+* baud rate setting
+* ADC setting
